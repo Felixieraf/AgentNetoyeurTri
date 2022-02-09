@@ -5,4 +5,27 @@ public class Dechet extends  Objet{
 
     public int getType(){return type;}
     public int getTaille(){return  taille;}
+    public Dechet(double _posX,double _posY,int type){
+        type=_type;
+        posX=_posX;
+        posY=_posY;
+        }
+    public  Dechet(Dechet d){
+        type=d.type;
+        posX=d.posX;
+        posY=d.posY;
+    }
+    public int ZoneInfluence(){
+       return 10+8*(taille-1) ;
+    }
+    public void AugmenteTaille(){
+         taille++;
+    }
+    public void DiminueTaille(){
+         taille --;
+    }
+    protected double ProbadePrendre(){
+        return Math.pow(DECROISSANCE,taille-1);
+    }
+
 }
