@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.function.Predicate;
 
-public class AgentTri {
+public class AgentTri extends  Objet{
     protected final static double PAS =3;
     protected final static double PROB_CHGT_DIRECTION=0.5;
     protected Dechet charge;
@@ -24,36 +26,36 @@ public class AgentTri {
     public boolean estCharge(){
         return charge!=null;
     }
-    public void MiseAjourPosition(){
-        posX=PAS*vitesseY;
-        posY=PAS*vitesseY;
-    }
-    double largeur=Environnement.getInstance().getLargeur();
-    double hauteur=Environnement.getInstance().getHauteur();
-    if(posX<0){
-        posX=0;
-    }
-    else if(posX>largeur){
-        posX=largeur;
-    }
-    if(posY<0){
-        posY=0;
-    }
-    else if(posX>hauteur){
-        posY=hauteur;
+
+    public void MiseAjourPosition() {
+        posX += PAS * vitesseY;
+        posY += PAS * vitesseY;
+        double largeur = Environnement.getInstance().getLargeur();
+        double hauteur = Environnement.getInstance().getHauteur();
+        if (posX < 0) {
+            posX = 0;
+        } else if (posX > largeur) {
+            posX = largeur;
+        }
+        if (posY < 0) {
+            posY = 0;
+        } else if (posX > hauteur) {
+            posY = hauteur;
+        }
     }
     protected void MiseAjourDirection(ArrayList<Dechet> dechets){
         //Ou aller?
-        ArrayList<ArrayList<Dechet>> dansZone=new ArrayList<>();
-        dansZone.add(dechets);
-        dansZone.removeIf(d->(Distance (d)>d.ZoneInfluence()));
-        Collection.sort(dansZone,(Dechet d1,Dechet d2)->(Distance(d1)<Distance(d2)?-1:1));
-        ArrayList<Dechet> but=null;
+        ArrayList<Dechet> dansZone=new ArrayList<>();
+        dansZone.addAll(dechets);
+        Predicate<Dechet> condition = d -> Distance(d)<d.ZoneInfluence();
+        dansZone.removeIf(condition);
+        Collections.sort(dansZone,(Dechet d1, Dechet d2)->(Distance(d1)<Distance(d2)?-1:1));
+        Dechet but=null;
         if(charge!=null){
-            dansZone.removeIf(d->d.type !=charge.type);
+            dansZone.removeIf(d->(d.type !=charge.type));
         }
         if(!dansZone.isEmpty()){
-            but=dansZone.get(0);
+            but= dansZone.get(0);
         }
         //Avont un but?
         if(but==null ||occupe){
@@ -73,7 +75,7 @@ public class AgentTri {
             //but atteint
             if(Distance(but)<PAS){
                 if(charge==null){
-                    if(Environnement.getInstance().generateur.nextDouble()<but.ProbaDePrendre()){
+                    if(Environnement.getInstance().generateur.nextDouble()<but.ProbadePrendre()){
                         charge=Environnement.getInstance().PrendreDechet(but);
                     }
                 }
