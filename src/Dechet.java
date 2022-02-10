@@ -5,7 +5,7 @@ public class Dechet extends  Objet{
 
     public int getType(){return type;}
     public int getTaille(){return  taille;}
-    public Dechet(double _posX,double _posY,int type){
+    public Dechet(double _posX,double _posY,int _type){
         type=_type;
         posX=_posX;
         posY=_posY;

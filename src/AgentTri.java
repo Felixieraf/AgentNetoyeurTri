@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class AgentTri {
+public class AgentTri extends  Objet{
     protected final static double PAS =3;
     protected final static double PROB_CHGT_DIRECTION=0.5;
     protected Dechet charge;
@@ -24,9 +24,10 @@ public class AgentTri {
     public boolean estCharge(){
         return charge!=null;
     }
+
     public void MiseAjourPosition(){
-        posX=PAS*vitesseY;
-        posY=PAS*vitesseY;
+        posX+=PAS*vitesseY;
+        posY+=PAS*vitesseY;
     }
     double largeur=Environnement.getInstance().getLargeur();
     double hauteur=Environnement.getInstance().getHauteur();
