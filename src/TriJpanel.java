@@ -72,4 +72,45 @@ public class TriJpanel extends JPanel implements PropertyChangeListener, MouseLi
     }
     System.out.println(env.dechets.size() +"-"+agentsCharge);
     }
+
+    public void DessinerAgent(AgentTri agent, Graphics g){
+        if(agent.estCharge()){
+            g.setColor(Color.GRAY);
+        }
+        else{
+            g.setColor(Color.BLACK);
+        }
+        g.fillRect((int) agent.posX-1,(int)agent.posY-1,3,3);
+    }
+    public void DessinerDechet(Dechet d, Graphics g){
+        Color couleur;
+        switch (d.type){
+            case 1:
+                couleur=Color.RED;
+            case 2:
+                couleur=Color.GREEN;
+            case 3:
+                couleur=Color.BLUE;
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + d.type);
+        }
+        g.setColor(couleur);
+        g.fillRect((int)d.posX-1,(int)d.posY-1,3,3);
+        couleur=new Color(couleur.getRed(),couleur.getGreen(),couleur.getBlue(),50);
+        g.setColor(couleur);
+        int zone=d.ZoneInfluence();
+        g.fillOval((int)d.posX-zone,(int)d.posY-zone,zone*2,zone*2);
+
+    }
+    @Override
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        for(AgentTri agent:env.agents){
+            DessinerAgent(agent,g);
+        }
+        for(Dechet dechet:env.dechets){
+            DessinerDechet(dechet,g);
+        }
+    }
 }
