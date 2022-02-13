@@ -16,7 +16,7 @@ public class TriJpanel extends JPanel implements PropertyChangeListener, MouseLi
         this.setBackground(Color.WHITE);
         this.addMouseListener(this);
     }
-    pubic void Lancer(){
+    public void Lancer(){
         env=Environnement.getInstance();
         env.Initaliser(50,30,getWidth(),getHeight(),3);
         env.AjouterChangeListener(this);
