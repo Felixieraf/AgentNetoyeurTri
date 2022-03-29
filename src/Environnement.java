@@ -70,7 +70,7 @@ public class Environnement {
         }
         support.firePropertyChange("changed",nbIterations,nbIterations+1);
         nbIterations++;
-        if(nbIterations% 500==0){
+        if(nbIterations % 500==0){
             Collections.reverse(dechets);
         }
     }
