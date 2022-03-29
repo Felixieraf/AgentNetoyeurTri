@@ -6,7 +6,8 @@ import java.util.function.Predicate;
 public class AgentTri extends  Objet{
     protected final static double PAS =3;
     protected final static double PROB_CHGT_DIRECTION=0.1;
-    protected Dechet charge;
+    protected final static int CHARGE_MAX_CAMION = 6;
+    protected int charge;
     protected Dechet cible;
     private double vitesseX;
     private double vitesseY;
@@ -15,7 +16,7 @@ public class AgentTri extends  Objet{
     protected void Normaliser(){
         vitesseX= cible.posX -posX;
         vitesseY= cible.posY-posY;
-        double longueur=Math.sqrt(vitesseX*vitesseX+vitesseY*vitesseY);
+        double longueur = Math.sqrt(vitesseX*vitesseX+vitesseY*vitesseY);
         vitesseX/=longueur;
         vitesseY/=longueur;
 
@@ -34,9 +35,11 @@ public class AgentTri extends  Objet{
         vitesseY/=longueur;
     }
     public boolean estCharge(){
-        return charge!=null;
+        return charge>0;
     }
-
+    public int chargeRestante() {
+        return CHARGE_MAX_CAMION - charge;
+    }
     public void MiseAjourPosition() {
         posX += PAS * vitesseX;
         posY += PAS * vitesseY;
@@ -53,6 +56,12 @@ public class AgentTri extends  Objet{
             posY = hauteur;
         }
     }
+
+    public void remplir(int charge) {
+        //tester si on ne dépasse pas ???!!!
+        this.charge += charge;
+    }
+
     protected void MiseAjourDirection(ArrayList<Dechet> dechets){
         //Ou aller?
         ArrayList<Dechet> dansZone=new ArrayList<>();
@@ -87,8 +96,7 @@ public class AgentTri extends  Objet{
             //A corriger
             if(Distance(cible)<=20){
                 System.out.println("but atteint");
-                Environnement.getInstance().PrendreDechet(cible);
-                charge=cible;
+                Environnement.getInstance().PrendreDechet(cible, this);
                 cible=null;
                 occupe=false;
             }

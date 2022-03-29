@@ -82,6 +82,7 @@ public class TriJpanel extends JPanel implements PropertyChangeListener, MouseLi
             g.setColor(Color.BLACK);
         }
         g.fillRect((int) agent.posX-1,(int)agent.posY-1,5,5);
+        g.drawString(String.valueOf(agent.charge), (int) agent.posX+2,(int)agent.posY+5);
     }
     public void DessinerDechet(Dechet d, Graphics g){
         Color couleur ;

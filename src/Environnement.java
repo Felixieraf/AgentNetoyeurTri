@@ -53,16 +53,11 @@ public class Environnement {
     public double getLargeur(){return largeur;}
     public double getHauteur(){return hauteur;}
     public void PoserDechet(Dechet d){d.AugmenteTaille();}
-    public Dechet PrendreDechet(Dechet d){
-        if(d.taille==1){
-            dechets.remove(d);
-            return d;
-        }
-        else{
-            d.DiminueTaille();
-            Dechet charge=new Dechet(d);
-            return charge;
-        }
+    public void PrendreDechet(Dechet d, AgentTri at){
+            d.DiminueTaille(at);
+            if (d.taille==0) {
+                dechets.remove(d);
+            }
     }
     public void MiseAjour(){
         for(AgentTri agent:agents){

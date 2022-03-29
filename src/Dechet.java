@@ -21,11 +21,23 @@ public class Dechet extends  Objet{
     public void AugmenteTaille(){
          taille++;
     }
-    public void DiminueTaille(){
-         taille --;
+    public void DiminueTaille(AgentTri at){
+        int macharge = taille;
+         if (macharge > at.chargeRestante()) {
+             //si le déchet est plus gros que le camion
+             taille -= at.chargeRestante();
+             //il est réduit de la taille du camion
+             at.remplir(at.chargeRestante());
+             //Et le camion est plein
+         } else {
+             //Et sinon, je me vide complétemetn dans le camion
+             at.remplir(taille);
+             taille=0;
+         }
+
     }
     protected double ProbadePrendre(){
         return Math.pow(DECROISSANCE,taille-1);
     }
-
+    
 }
