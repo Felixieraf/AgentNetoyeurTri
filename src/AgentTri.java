@@ -5,30 +5,40 @@ import java.util.function.Predicate;
 
 public class AgentTri extends  Objet{
     protected final static double PAS =3;
-    protected final static double PROB_CHGT_DIRECTION=0.5;
+    protected final static double PROB_CHGT_DIRECTION=0.1;
     protected Dechet charge;
-    protected double vitesseX;
-    protected double vitesseY;
+    protected Dechet cible;
+    private double vitesseX;
+    private double vitesseY;
     protected boolean occupe=false;
 
     protected void Normaliser(){
+        vitesseX= cible.posX -posX;
+        vitesseY= cible.posY-posY;
         double longueur=Math.sqrt(vitesseX*vitesseX+vitesseY*vitesseY);
         vitesseX/=longueur;
         vitesseY/=longueur;
+
     }
     public AgentTri(double _posX,double _posY){
         posX=_posX;
         posY=_posY;
-       vitesseX= Environnement.getInstance().generateur.nextDouble()-0.5;
-       vitesseY= Environnement.getInstance().generateur.nextDouble()-0.5;
-       Normaliser();
+        cibleAleatoire();
+
+    }
+    private void cibleAleatoire(){
+        vitesseX=(Environnement.getInstance().generateur.nextDouble()*Environnement.getInstance().getLargeur());
+        vitesseY=(Environnement.getInstance().generateur.nextDouble()*Environnement.getInstance().getHauteur());
+        double longueur=Math.sqrt(vitesseX*vitesseX+vitesseY*vitesseY);
+        vitesseX/=longueur;
+        vitesseY/=longueur;
     }
     public boolean estCharge(){
         return charge!=null;
     }
 
     public void MiseAjourPosition() {
-        posX += PAS * vitesseY;
+        posX += PAS * vitesseX;
         posY += PAS * vitesseY;
         double largeur = Environnement.getInstance().getLargeur();
         double hauteur = Environnement.getInstance().getHauteur();
@@ -39,7 +49,7 @@ public class AgentTri extends  Objet{
         }
         if (posY < 0) {
             posY = 0;
-        } else if (posX > hauteur) {
+        } else if (posY > hauteur) {
             posY = hauteur;
         }
     }
@@ -51,42 +61,43 @@ public class AgentTri extends  Objet{
         dansZone.removeIf(condition);
         Collections.sort(dansZone,(Dechet d1, Dechet d2)->(Distance(d1)<Distance(d2)?-1:1));
         Dechet but=null;
-        if(charge!=null){
-            dansZone.removeIf(d->(d.type !=charge.type));
+        if(cible!=null){
+            dansZone.removeIf(d->(d.type !=cible.type));
         }
         if(!dansZone.isEmpty()){
-            but= dansZone.get(0);
+            cible= dansZone.get(0);
+          /*vitesseX=but.posX -posX;
+            vitesseY=but.posY-posY;*/
+            Normaliser();
         }
         //Avont un but?
-        if(but==null ||occupe){
+        if(occupe && cible== null){
+            occupe=false;
+        }
+        if(cible==null ||occupe){
             //Déplacement aléatoire
             if(Environnement.getInstance().generateur.nextDouble()<PROB_CHGT_DIRECTION){
-                vitesseX=Environnement.getInstance().generateur.nextDouble()-0.5;
-                vitesseY=Environnement.getInstance().generateur.nextDouble()-0.5;
-            }
-            if(occupe && but== null){
-                occupe=false;
+                cibleAleatoire();
             }
         }
         else{
             //Aller au but
-            vitesseX=but.posX -posX;
-            vitesseY=but.posY-posY;
+
             //but atteint
-            if(Distance(but)<PAS){
-                if(charge==null){
-                    if(Environnement.getInstance().generateur.nextDouble()<but.ProbadePrendre()){
-                        charge=Environnement.getInstance().PrendreDechet(but);
-                    }
-                }
-                else{
-                    Environnement.getInstance().PoserDechet(but);
-                    charge=null;
-                }
-                occupe=true;
+            //A corriger
+            if(Distance(cible)<=20){
+                System.out.println("but atteint");
+                Environnement.getInstance().PrendreDechet(cible);
+                charge=cible;
+                cible=null;
+                occupe=false;
             }
+            else{
+
+                Normaliser();
+            }
+
         }
-        Normaliser();
     }
 
 
