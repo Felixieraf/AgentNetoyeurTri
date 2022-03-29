@@ -18,7 +18,7 @@ public class TriJpanel extends JPanel implements PropertyChangeListener, MouseLi
     }
     public void Lancer(){
         env=Environnement.getInstance();
-        env.Initaliser(50,30,getWidth(),getHeight(),3);
+        env.Initaliser(20,10,getWidth(),getHeight(),2);
         env.AjouterChangeListener(this);
     }
 
@@ -37,7 +37,8 @@ public class TriJpanel extends JPanel implements PropertyChangeListener, MouseLi
                     env.MiseAjour();
                 }
             };
-            timer.scheduleAtFixedRate(tache,0,10);
+            timer.scheduleAtFixedRate(tache,10,5);
+            enCours=true;
         }
     }
 
@@ -64,7 +65,7 @@ public class TriJpanel extends JPanel implements PropertyChangeListener, MouseLi
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
     this.repaint();
-    int agentsCharge=0;
+    int agentsCharge=10;
     for(AgentTri a: env.agents){
         if(a.estCharge()){
             agentsCharge++;
@@ -80,23 +81,21 @@ public class TriJpanel extends JPanel implements PropertyChangeListener, MouseLi
         else{
             g.setColor(Color.BLACK);
         }
-        g.fillRect((int) agent.posX-1,(int)agent.posY-1,3,3);
+        g.fillRect((int) agent.posX-1,(int)agent.posY-1,5,5);
     }
     public void DessinerDechet(Dechet d, Graphics g){
-        Color couleur;
+        Color couleur ;
         switch (d.type){
             case 1:
                 couleur=Color.RED;
             case 2:
                 couleur=Color.GREEN;
-            case 3:
+            default:
                 couleur=Color.BLUE;
                 break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + d.type);
         }
         g.setColor(couleur);
-        g.fillRect((int)d.posX-1,(int)d.posY-1,3,3);
+        g.fillRect((int)d.posX-1,(int)d.posY-1,5,5);
         couleur=new Color(couleur.getRed(),couleur.getGreen(),couleur.getBlue(),50);
         g.setColor(couleur);
         int zone=d.ZoneInfluence();
