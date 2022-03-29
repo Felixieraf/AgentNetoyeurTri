@@ -37,7 +37,7 @@ public class TriJpanel extends JPanel implements PropertyChangeListener, MouseLi
                     env.MiseAjour();
                 }
             };
-            timer.scheduleAtFixedRate(tache,10,5);
+            timer.scheduleAtFixedRate(tache,10,100);
             enCours=true;
         }
     }
@@ -71,7 +71,7 @@ public class TriJpanel extends JPanel implements PropertyChangeListener, MouseLi
             agentsCharge++;
         }
     }
-    System.out.println(env.dechets.size() +"-"+agentsCharge);
+    //System.out.println(env.dechets.size() +"-"+agentsCharge);
     }
 
     public void DessinerAgent(AgentTri agent, Graphics g){

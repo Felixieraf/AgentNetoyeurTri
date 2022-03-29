@@ -20,6 +20,7 @@ public class Environnement {
     }
     public void AjouterChangeListener(PropertyChangeListener pcl){
         support.addPropertyChangeListener(pcl);
+        support.addPropertyChangeListener(pcl);
     }
     protected Random generateur;
     protected double largeur;
